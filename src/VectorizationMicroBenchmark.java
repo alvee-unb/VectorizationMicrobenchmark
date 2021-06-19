@@ -1,12 +1,12 @@
 public class VectorizationMicroBenchmark {
     static float[] a = new float[1024];
-    static float b = 7.0F;
+    static float[] b = new float[1024];
 
-    private static long vecFloat(float[] a, float b) {
+    private static long vecFloat(float[] x, float y[]) {
         long startTime = System.nanoTime();
 
-        for (int i = 0; i < a.length; i++) {
-            a[i] = a[i] + 7.0F;
+        for (int i = 0; i < x.length; i++) {
+            x[i] += y[i];
         }
 
         return System.nanoTime() - startTime;
@@ -23,6 +23,11 @@ public class VectorizationMicroBenchmark {
                 (args[0].equals("Long") && args[1].equals("Div"))) {
             System.out.println(args[1] + " of data-type " + args[0] + " is not supported.");
             //return;
+        }
+
+        for (int i = 0; i < a.length; i++) {
+            a[i] = i;
+            b[i] = b.length - 1 - i;
         }
 
         double warmup_time = 0;

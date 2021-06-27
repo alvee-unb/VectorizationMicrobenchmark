@@ -27,14 +27,14 @@ echo "Current dir: $(pwd)"
 rm -r *.csv
 
 declare -a dataType=("Int" 
-				"Long"
+		"Long"
                 "Float"
-				"Double")
+		"Double")
 
 declare -a operationType=("Add"
-				"Sub"
-                "Mul"
-				"Div")
+			"Sub"
+        	        "Mul"
+			"Div")
 
 # Call like runProgram "filename" ""
 runProgram ()

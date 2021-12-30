@@ -9,7 +9,7 @@ if [[ $1 != "" ]] && [[ $2 != "" ]] && [[ $3 != "" ]] && [[ $4 != "" ]] && [[ $5
     MEASURED_ITERATIONS=$5
     echo "Iterations set: $ITERATIONS, Array size: $ARRAY_SIZE, Warmups: $WARMUP_ITERATIONS, Measures: $MEASURED_ITERATIONS"
 else
-    echo -e "Usage ./run_all.sh <java_path> <iterations> <array_size> <warmup_iterations> <measured_iterations>"
+    echo -e "Usage: ./run_all.sh <java_path> <iterations> <array_size> <warmup_iterations> <measured_iterations>"
     exit -1
 fi
 
@@ -24,6 +24,8 @@ $JAVAC_HOME $srcDir/*.java
 echo "Compiled Java files."
 
 echo "Current dir: $(pwd)"
+
+echo "Deleting existing csv files."
 rm -r *.csv
 
 declare -a dataType=("Int" 
@@ -36,10 +38,10 @@ declare -a operationType=("Add"
         	        "Mul"
 			"Div")
 
-# Call like runProgram "filename" ""
+# Calls like runProgram "filename" ""
 runProgram ()
 {
-    # Set the filename depending on the parameter passed on; i.e. -Xjit:disableAutoSIMD
+    # Sets the filename depending on the parameter passed on; i.e. -Xjit:disableAutoSIMD
     if [[ $2 == "" ]]; then
         currFileName="$1.csv"
     else
@@ -53,20 +55,20 @@ runProgram ()
     x=1
     while [ $x -le $ITERATIONS ]
     do
-        # Execute java class with SIMD
+        # Executes java class with SIMD and w/o SIMD
         if [[ $2 == "" ]]; then
             ## do the main thing here
-            $JAVA_HOME -Xms4G -Xmx4G -cp $srcDir VectorizationMicroBenchmark $i $j $ARRAY_SIZE $WARMUP_ITERATIONS $MEASURED_ITERATIONS |& tee -a $currFileName
+            $JAVA_HOME -Xjit:limit={*Op.*},count=0,optlevel=hot -Xms4G -Xmx4G -cp $srcDir VectorizationMicroBenchmark $i $j $ARRAY_SIZE $WARMUP_ITERATIONS $MEASURED_ITERATIONS |& tee -a $currFileName
         else
-            #-Xjit:disableAutoSIMD
-            $JAVA_HOME -Xjit:disableAutoSIMD -Xms4G -Xmx4G -cp $srcDir VectorizationMicroBenchmark $i $j $ARRAY_SIZE $WARMUP_ITERATIONS $MEASURED_ITERATIONS |& tee -a $currFileName
+            ## -Xjit:disableAutoSIMD for disabling SIMD
+            $JAVA_HOME -Xjit:limit={*Op.*},count=0,optlevel=hot,disableAutoSIMD -Xms4G -Xmx4G -cp $srcDir VectorizationMicroBenchmark $i $j $ARRAY_SIZE $WARMUP_ITERATIONS $MEASURED_ITERATIONS |& tee -a $currFileName
         fi
     
         x=$(( $x + 1 ))
     done
 }
 
-# Loop through the above array
+# Loops through the above array
 for i in "${dataType[@]}"
 do
     for j in "${operationType[@]}"

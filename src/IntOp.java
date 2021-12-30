@@ -1,3 +1,9 @@
+/**
+ *	Author: Md Alvee Noor (alvee.n@unb.ca, alvee.e1tech@gmail.com)
+ *	Centre for Advanced Studies-Atlantic (CAS-Atlantic)
+ *	Univerity of New Brunswick
+*/
+
 public class IntOp {
 
     static long addI(int[] x, int y[]) {

@@ -1,7 +1,7 @@
 #!/bin/bash
 #	Author: Md Alvee Noor (alvee.n@unb.ca, alvee.e1tech@gmail.com)
 #	Centre for Advanced Studies-Atlantic (CAS-Atlantic)
-#   Univerity of New Brunswick
+#	University of New Brunswick
 
 if [[ $1 != "" ]] && [[ $2 != "" ]] && [[ $3 != "" ]] && [[ $4 != "" ]] && [[ $5 != "" ]]; then
     JAVA_HOME="$1"
